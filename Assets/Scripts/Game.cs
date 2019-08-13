@@ -18,18 +18,35 @@ public class Game : MonoBehaviour
     [SerializeField]
     private int distanciaDeQueda;
 
+    
+
     Vector2 lugarDeSpawnar;
 
+    Bola bola_ref;
+    [SerializeField]
+    int poolMax;
+
+    Queue<GameObject> poolBola = new Queue<GameObject>();
+
+
+    Vector3 position;
 
     // Start is called before the first frame update
     void Start()
     {
+        spawnarBola(distanciaDeQueda, lugarDeSpawnar);
+        
+
+
+
         
     }
 
     // Update is called once per frame
    void Update()
    {
+      
+
       if(Time.time>=spawnarBolaInicial + spawnarBolaMax)
       {
             
@@ -47,10 +64,32 @@ public class Game : MonoBehaviour
         position.x = Random.Range(position.x - sizeX, position.x + sizeX);
         position.y = distanciaBolaPlataforma;
         position.z = -1;
-        GameObject ru = Instantiate(bolaPrefab, position, Quaternion.identity);
+        if (poolBola.Count > 0) //quando tiver q spawnar se tem objetos na pool, utilizar eles senão criar um novo
+        {                       //não entrara neste if se não houver nada na pool
+            GameObject bola = poolBola.Dequeue();
+            bola.transform.position = position;//aqui acha a localização da bola
+            bola.SetActive(true);
+        }
+        else
+        {
+
+            GameObject ru = Instantiate(bolaPrefab, position, Quaternion.identity);
+        }
+        
 
    }
-   
+   public void addPool(GameObject bola)//quando tiver q ser destruido se a pool ainda tem espaço,adicionar na pool senão,destruir
+   {
+        if (poolBola.Count < poolMax)
+        {
+            poolBola.Enqueue(bola);
+        }
+        else
+        {
+            Destroy(bola);
+        }
+   }   
+
 
 
 

@@ -4,38 +4,50 @@ using UnityEngine;
 
 public class Bola : MonoBehaviour
 {
+    Game game_ref;
+
+
     [SerializeField]
     private float speed;
 
     Rigidbody2D body;
+    bool isDestroy;
+
+    
+
+
+
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
+
+
+        
+                       
+
         if (!body || body == null)
             body = GetComponent<Rigidbody2D>();
+
         
+
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        moverBola();
+       
     }
-    public void moverBola()
+    
+   
+    public void Destroy()
     {
-        Vector2 input = new Vector2(0, 1);
-        Vector2 direction = input.normalized;
-        Vector2 velocity = speed * direction;
-        velocity.x = body.velocity.x;
-        body.velocity = velocity;
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.CompareTag("colisor"))
-        {
-
-        }  
+        game_ref.addPool(gameObject);
     }
 
 }
