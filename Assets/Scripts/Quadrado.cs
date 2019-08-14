@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quadrado : MonoBehaviour
+public class Quadrado : Geometria
 {
     // Start is called before the first frame update
     void Start()

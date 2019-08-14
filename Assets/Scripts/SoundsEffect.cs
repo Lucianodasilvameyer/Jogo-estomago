@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class SoundsEffect : MonoBehaviour
 {
-    public static SoundEfecctScript Instance;
+    public static SoundsEffect Instance;
 
-    public AudioClip destructionSoundBola;
-    public AudioClip crushSoundBola;
+
     public AudioClip destructionSoundTriangulo;
     public AudioClip crushSoundTriangulo;
     public AudioClip destructionSoundQuadrado;
@@ -21,29 +20,7 @@ public class SoundsEffect : MonoBehaviour
 
         }
         Instance = this;
-    }
-    public void MakeSomDeDestruicaoDaBola()
-    {
-        MakeSound (destructionSoundBola);
-    }
-    public void MakeSomDeBatidaDaBola()
-    {
-        MakeSound (crushSoundBola);
-    }
-    public void MakeSomDeDestruicaoDoTriangulo()
-    {
-        MakeSound(destructionSoundTriangulo);
-    }
-    public void MakeSomDeBatidaDoTriangulo()
-    {
-        MakeSound(crushSoundTriangulo);
-    }
-    public void MakeSomDeDestruicaoDoQuadrado()
-    {
-        MakeSound(destructionSoundQuadrado);
-    }
-    public void MakeSomDeBatidaDoQuadrado()
-    {
+
         MakeSound(crushSoundQuadrado);
     }
     private void MakeSound(AudioClip originalClip)

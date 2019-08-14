@@ -2,31 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bola : MonoBehaviour
+public class Bola : Geometria
 {
-    Game game_ref;
+   
 
 
-    [SerializeField]
-    private float speed;
-
-    Rigidbody2D body;
-    bool isDestroy;
-
-    
-
-
-
-    
 
     // Start is called before the first frame update
     void Start()
     {
-        game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
+     //   game_ref = GameObject.FindGameObjectWithTag("Game").GetComponent<Game>();
+
+        if (!audioSource || audioSource == null)
+            audioSource = GetComponent<AudioSource>();
 
 
-        
-                       
+
+
 
         if (!body || body == null)
             body = GetComponent<Rigidbody2D>();
@@ -38,16 +30,24 @@ public class Bola : MonoBehaviour
 
     }
 
+   
+
     // Update is called once per frame
     void Update()
     {
        
     }
-    
-   
-    public void Destroy()
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        game_ref.addPool(gameObject);
+        playSfx(bounceSoundBola);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        
+    }
+
 
 }

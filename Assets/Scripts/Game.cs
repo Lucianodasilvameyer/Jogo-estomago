@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Game : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Game : MonoBehaviour
     Plataforma plataforma_ref;
 
     public GameObject bolaPrefab;
+    public GameObject quadradoPrefab;
+    public GameObject TrianguloPrefab;
 
     [SerializeField]
     private float spawnarBolaInicial;
@@ -26,7 +29,7 @@ public class Game : MonoBehaviour
     [SerializeField]
     int poolMax;
 
-    Queue<GameObject> poolBola = new Queue<GameObject>();
+    List<Geometria> poolGeometrias = new List<Geometria>();
 
 
     Vector3 position;
@@ -34,12 +37,14 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnarBola(distanciaDeQueda, lugarDeSpawnar);
-        
+       // spawnarGeometria<Bola>(distanciaDeQueda, lugarDeSpawnar);
+
+        spawnarGeometria<Quadrado>(distanciaDeQueda, lugarDeSpawnar);
+        spawnarGeometria<Triangulo>(distanciaDeQueda, lugarDeSpawnar);
 
 
 
-        
+
     }
 
     // Update is called once per frame
@@ -50,43 +55,108 @@ public class Game : MonoBehaviour
       if(Time.time>=spawnarBolaInicial + spawnarBolaMax)
       {
             
-            spawnarBola(distanciaDeQueda, lugarDeSpawnar);
+            spawnarGeometria<Bola>(distanciaDeQueda, lugarDeSpawnar);
             spawnarBolaInicial = Time.time;
 
         }
              
    }
-   public void spawnarBola(int distanciaBolaPlataforma, Vector2 inicialPos)
-   {
+  
+
+    public void spawnarGeometria<T>(int distanciaBolaPlataforma, Vector2 inicialPos)
+    {
+        if (!typeof(T).IsSubclassOf(typeof(Geometria)))//aqui verifica se o T é filho da geometria
+            return;
+
         inicialPos = plataforma_ref.transform.position;
         Vector3 position = inicialPos;
-        float sizeX = plataforma_ref.GetComponent<SpriteRenderer>().bounds.size.x/2;
+        float sizeX = plataforma_ref.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         position.x = Random.Range(position.x - sizeX, position.x + sizeX);
         position.y = distanciaBolaPlataforma;
         position.z = -1;
-        if (poolBola.Count > 0) //quando tiver q spawnar se tem objetos na pool, utilizar eles senão criar um novo
+
+        if (poolGeometrias.Count > 0) //quando tiver q spawnar se tem objetos na pool, utilizar eles senão criar um novo
         {                       //não entrara neste if se não houver nada na pool
-            GameObject bola = poolBola.Dequeue();
-            bola.transform.position = position;//aqui acha a localização da bola
-            bola.SetActive(true);
+
+
+            if (typeof(T) == typeof(Bola))
+            {
+                if (poolGeometrias.OfType<Bola>().Any()) //aqui o ofType é para pegar todos os elementos do tipo bola
+                {
+                    int index = poolGeometrias.FindLastIndex(x => x.GetType() == typeof(Bola)); // salva a posição
+                    
+                    Bola b = (Bola)poolGeometrias[index];
+                    poolGeometrias.RemoveAt(index); // retira da lista
+
+                    b.transform.position = position;//aqui acha a localização da bola
+                    b.gameObject.SetActive(true);
+                }
+
+
+            }
+            else if (typeof(T) == typeof(Quadrado))
+            {
+                if (poolGeometrias.OfType<Quadrado>().Any()) //aqui o ofType é para pegar todos os elementos do tipo bola
+                {
+                    int index = poolGeometrias.FindLastIndex(x => x.GetType() == typeof(Quadrado)); // salva a posição na lista no index
+
+                    Quadrado b = (Quadrado)poolGeometrias[index];
+                    poolGeometrias.RemoveAt(index); // retira da lista
+
+                    b.transform.position = position;//aqui acha a localização da bola
+                    b.gameObject.SetActive(true);
+                }
+            }
+            else if (typeof(T) == typeof(Triangulo))
+            {
+                if (poolGeometrias.OfType<Triangulo>().Any()) //aqui o ofType é para pegar todos os elementos do tipo bola
+                {
+                    int index = poolGeometrias.FindLastIndex(x => x.GetType() == typeof(Triangulo)); // salva a posição
+
+                    Triangulo b = (Triangulo)poolGeometrias[index];
+                    poolGeometrias.RemoveAt(index); // retira da lista
+
+                    b.transform.position = position;//aqui o position é onde o objeto sera spawnada
+                    b.gameObject.SetActive(true);
+                }
+            }
+
+
+
         }
         else
         {
+            if(typeof(T) == typeof(Bola))
+            {
+                Instantiate(bolaPrefab, position, Quaternion.identity);
+            }
+            else if (typeof(T) == typeof(Quadrado))
+            {
+                Instantiate(quadradoPrefab, position, Quaternion.identity);
+            }
+            else if (typeof(T) == typeof(Triangulo))
+            {
+                Instantiate(TrianguloPrefab, position, Quaternion.identity);
+            }
 
-            GameObject ru = Instantiate(bolaPrefab, position, Quaternion.identity);
+
         }
-        
 
-   }
-   public void addPool(GameObject bola)//quando tiver q ser destruido se a pool ainda tem espaço,adicionar na pool senão,destruir
+
+    }
+
+    public void addPool(Geometria bola)//quando tiver q ser destruido se a pool ainda tem espaço,adicionar na pool senão,destruir
    {
-        if (poolBola.Count < poolMax)
+        if (poolGeometrias.Count < poolMax)
         {
-            poolBola.Enqueue(bola);
+            poolGeometrias.Add(bola);
         }
         else
         {
+            bola.playSfx(bola.destructionSoundBola);
             Destroy(bola);
+
+         
         }
    }   
 
