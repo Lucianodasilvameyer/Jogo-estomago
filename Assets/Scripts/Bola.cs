@@ -40,7 +40,7 @@ public class Bola : Geometria
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        playSfx(bounceSoundBola);
+        playSfx(bounceSound);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -48,6 +48,6 @@ public class Bola : Geometria
         
         
     }
-
+    
 
 }

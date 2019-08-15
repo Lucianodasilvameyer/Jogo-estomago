@@ -15,8 +15,8 @@ public class Geometria : MonoBehaviour
 
 
     public AudioSource audioSource;
-    public AudioClip destructionSoundBola;
-    public AudioClip bounceSoundBola;
+    public AudioClip destructionSound;
+    public AudioClip bounceSound;
 
 
     // Start is called before the first frame update
@@ -39,7 +39,7 @@ public class Geometria : MonoBehaviour
 
     public void Destroy()
     {
-        playSfx(destructionSoundBola);
+        playSfx(destructionSound);
         game_ref.addPool(this);
     }
 

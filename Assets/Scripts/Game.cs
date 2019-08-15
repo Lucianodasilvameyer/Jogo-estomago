@@ -96,14 +96,14 @@ public class Game : MonoBehaviour
             }
             else if (typeof(T) == typeof(Quadrado))
             {
-                if (poolGeometrias.OfType<Quadrado>().Any()) //aqui o ofType é para pegar todos os elementos do tipo bola
+                if (poolGeometrias.OfType<Quadrado>().Any()) 
                 {
-                    int index = poolGeometrias.FindLastIndex(x => x.GetType() == typeof(Quadrado)); // salva a posição na lista no index
+                    int index = poolGeometrias.FindLastIndex(x => x.GetType() == typeof(Quadrado)); 
 
                     Quadrado b = (Quadrado)poolGeometrias[index];
-                    poolGeometrias.RemoveAt(index); // retira da lista
+                    poolGeometrias.RemoveAt(index); 
 
-                    b.transform.position = position;//aqui acha a localização da bola
+                    b.transform.position = position;
                     b.gameObject.SetActive(true);
                 }
             }
@@ -153,7 +153,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            bola.playSfx(bola.destructionSoundBola);
+            bola.playSfx(bola.destructionSound);
             Destroy(bola);
 
          

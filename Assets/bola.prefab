@@ -94,7 +94,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  audioSource: {fileID: 6650220142764719155}
+  audioSource: {fileID: -6230584052889123787, guid: d6f61c46937fa6e46b52cb1532674ff4,
+    type: 3}
   destructionSoundBola: {fileID: 8300000, guid: 4e1ff8faed12a475eba9be0e46072269,
     type: 3}
   bounceSoundBola: {fileID: 8300000, guid: 4e1ff8faed12a475eba9be0e46072269, type: 3}
